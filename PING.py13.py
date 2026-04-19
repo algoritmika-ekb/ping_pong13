@@ -51,3 +51,23 @@ font.init()
 font = font.Font(None, 35)
 lose 1 = font.render("PLAYER 1 LOSE!",  True, (180,0,0))
 lose 2 = font.render("PLAYER 2 LOSE!",  True, (180,0,0))
+
+speed_x = 3
+speed_y = 3
+
+while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+        if finish != True
+            window.fill(back)
+            racket1 = update_1()
+            raсket2 = update_2()
+            ball.rect.x += speed_x
+            ball.rect.y += speed_y
+
+            racket1.reset()
+            racket2.reset()
+            ball.reset()
+        display.update()
+        clock.tick(FPS)
