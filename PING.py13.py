@@ -52,24 +52,71 @@ clock = time.Clock()
 FPS = 60
 
 # создание ракеток и мяча
-racket1 = Player('racket.png', 30, 200, 4, 50, 150)
-racket2 = Player('racket.png', 520, 200, 4, 50, 150)
-ball = GameSprite('tenis_ball.png', 275, 225, 4, 50, 50)
+racket1 = Player('racket.jpg', 30, 200, 4, 50, 150)
+racket2 = Player('racket.jpg', 520, 200, 4, 50, 150)
+ball = GameSprite('wallper.png', 275, 225, 4, 50, 50)
+
+speed_x = 3
+speed_y = 3
+
+def restart_game():
+    global speed_x, speed_y, finish
+
+    ball.rect.x = 275
+    ball.rect.y = 225
+
+    racket1.rect.y = 200
+    racket2.rect.y = 200
+
+    speed_x = 3
+    speed_y = 3
+
+    finish = False
+
+font.init()
+font = font.Font(None, 35)
+
+los1 = font.render('Игрок 1 лох', True, (180, 0, 0))
+los2 = font.render('Игрок 2 лох', True, (180, 0, 0))
+
+restart_text = font.render('Нажми R что бы перезагрузить', True, (0, 0, 0))
+finish = False
 
 # игровой цикл
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
+        if e.type == KEYDOWN:
+            if e.key == K_r and finish == True:
+                restart_game()
 
-    window.fill(back)
+    if finish != True:
+        window.fill(back)
 
-    racket1.update_l()
-    racket2.update_r()
+        racket1.update_l()
+        racket2.update_r()
+        
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
 
-    racket1.reset()
-    racket2.reset()
-    ball.reset()
+        if ball.rect.y > win_height - 50 or ball.rect.y < 0:
+            speed_y *= -1
 
-    display.update()
-    clock.tick(FPS)
+        if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+            speed_x *= -1
+
+        if ball.rect.x < 0:
+            finish = True
+            window.blit(los1, (200, 200))
+            window.blit(restart_text, (180, 220))
+        if ball.rect.x > win_width:
+            finish = True
+            window.blit(los2, (200, 200))
+            window.blit(restart_text, (180, 220))
+        racket1.reset()
+        racket2.reset()
+        ball.reset()
+
+        display.update()
+        clock.tick(FPS)
